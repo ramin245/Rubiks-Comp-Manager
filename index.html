@@ -475,7 +475,7 @@ async function loadStaff(){if(!CLOUD||ROLE!=='admin'||STF.ok)return;STF.ok=true;
 async function staffAct(a){const p=a.split(':'),k=p[0],u=p[1],ck=r=>{if(r&&r.error)uiAlert(r.error.message);STF.ok=false;loadStaff()};
 if(k==='ap'){const q=STF.req.find(x=>x.user_id===u);SB.from('staff').insert({user_id:u,role:p[2],email:q&&q.email}).then(r=>{if(r.error)return uiAlert(r.error.message);SB.from('staff_requests').delete().eq('user_id',u).then(ck)})}
 else if(k==='rj')SB.from('staff_requests').delete().eq('user_id',u).then(ck);
-else if(k==='rm'){if(await uiConfirm('Remove this staff member? They will lose access.'))SB.from('staff').delete().eq('user_id',u).then(ck)}
+else if(k==='rm'){if(await uiConfirm('Delete this staff member? Their login account will also be permanently deleted from the database, and they must sign up again to return.')){const r=await SB.rpc('delete_staff_user',{target:u});if(!r.error)return ck(null);if(/function|schema cache|not find/i.test(r.error.message||'')){const r2=await SB.from('staff').delete().eq('user_id',u);ck(r2);uiAlert('They were removed from the access list, but their login account could not be deleted yet. Run delete_staff_user.sql in the Supabase SQL Editor first.')}else ck(r)}}
 else if(k==='inv')SB.from('staff_invites').delete().eq('email',a.slice(4)).then(ck)}
 function vStaff(){if(!CLOUD||ROLE!=='admin')return'<div class="card"><p class="mute">Only admins can manage staff.</p></div>';if(!STF.done)return'<div class="card"><p class="mute">Loading staff…</p></div>';
 const ro=(v,x)=>`<option value="${v}" ${x===v?'selected':''}>${v==='admin'?'Admin':'Scorer'}</option>`;
