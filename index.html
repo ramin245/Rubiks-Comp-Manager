@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rubiks Competition Manager</title>
+<script>try{var t=localStorage.getItem('rcm.theme');if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.dataset.theme=t}catch(e){}</script><title>SolveBoard</title>
 <meta name="description" content="Run speedcubing competitions: registration, live results, scrambles and profiles.">
-<meta name="theme-color" content="#1f5fd6"><meta property="og:title" content="Rubiks Competition Manager"><meta property="og:description" content="Live speedcubing results and scrambles.">
+<meta name="theme-color" content="#1f5fd6"><meta property="og:title" content="SolveBoard"><meta property="og:description" content="Live speedcubing results and scrambles.">
 <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-192.png"><link rel="manifest" href="manifest.webmanifest">
 <style>
 :root{--bg:#f6f6f3;--card:#fff;--ink:#1c1e24;--mute:#6b707b;--line:#dcdcd6;--acc:#1f5fd6;--ok:#157a3d;--bad:#c62828;--gold:#f2c230;--sil:#c3c8d0;--bro:#d99a63}
@@ -115,9 +115,51 @@ a.b{display:inline-block;text-decoration:none;color:var(--ink);padding:10px 16px
 .pg{height:8px;min-width:90px;background:var(--line);border-radius:9px;overflow:hidden}.pg i{display:block;height:100%;background:var(--acc)}.cl{list-style:none;padding:0;margin:0}.cl li{padding:6px 0}.lnk{background:none;border:0;color:var(--acc);font:inherit;cursor:pointer;padding:0;text-decoration:underline}
 .qi{grid-template-columns:1fr}.qrow{display:flex;gap:8px;align-items:center}.qrow b{width:22px;text-align:center}.qrow input{flex:1;min-width:0}.qb{min-width:58px;min-height:52px;font:inherit;font-weight:800;font-size:17px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer;touch-action:manipulation}.qb:active{background:var(--line)}
 @media(max-width:760px){.subnav{flex-wrap:nowrap;overflow-x:auto}.subnav button{flex:none;white-space:nowrap}.qb{min-width:50px;padding:0 6px}}
+
+/* ===== UI overhaul: light + dark themes ===== */
+body{--onacc:#fff;--tint:#eef1ff;--sh:0 1px 2px rgba(16,24,40,.05),0 10px 28px rgba(16,24,40,.06)}
+body.stage{--onacc:#000;--tint:#1a1a1a;--sh:none}
+html[data-theme=light] body:not(.stage){--bg:#f4f5fa;--card:#fff;--ink:#12151f;--mute:#667085;--line:#e3e6ee;--acc:#3a56f5;--onacc:#fff;--ok:#0f9d58;--bad:#d92d3a;--tint:#eef1ff;--sh:0 1px 2px rgba(16,24,40,.05),0 10px 28px rgba(16,24,40,.06)}
+html[data-theme=dark] body:not(.stage){--bg:#0c0f16;--card:#141924;--ink:#eef1f8;--mute:#8d96a8;--line:#252c3b;--acc:#8aa0ff;--onacc:#0b1020;--ok:#4fd48b;--bad:#ff7a81;--tint:#1b2235;--sh:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35)}
+html[data-theme=dark]{color-scheme:dark}
+body{font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:color-mix(in srgb,var(--card) 84%,transparent);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line);box-shadow:none;padding:12px 24px}
+h1{font-size:17px;letter-spacing:-.01em}
+nav button{border-radius:10px;font-size:14px;padding:8px 14px;color:var(--mute)}
+nav button:hover{background:var(--tint);color:var(--ink)}
+nav button.on{background:var(--acc);color:var(--onacc)}
+#thm{width:40px;height:40px;padding:0;border-radius:50%;font-size:18px;line-height:1}
+.card,.cc,.role,.pc,.tile{background:var(--card);border:1px solid var(--line);box-shadow:var(--sh)}
+.card{border-radius:16px;padding:22px}
+h2{font-size:17px;letter-spacing:-.01em}
+button.b,select,input.t,a.b,textarea.t{border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+button.b:hover,a.b:hover{border-color:var(--acc);background:var(--tint)}
+button.p,a.b.p{background:var(--acc);border-color:var(--acc);color:var(--onacc);box-shadow:none}
+button.p:hover,a.b.p:hover{background:var(--acc);filter:brightness(1.1)}
+button.d{color:var(--bad)}
+input.t:focus,select:focus,textarea.t:focus,td input:focus,.qi input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 25%,transparent)}
+td input,.qi input{border-radius:9px;background:var(--bg);color:var(--ink)}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--line)}
+table tr:nth-child(even) td{background:none}
+table:not(.st) tr:hover>td{background:var(--tint)}
+tr:last-child>td{border-bottom:0}
+.stk{border-radius:50%;min-width:30px;height:30px;font-size:13px}
+.subnav{background:var(--card);border:1px solid var(--line);border-radius:12px}
+.subnav button.on{background:var(--acc);color:var(--onacc)}
+.tile{border-radius:14px}.tile b{color:var(--acc)}
+.cc{border-radius:16px;transition:transform .15s,border-color .15s}.cc:hover{transform:translateY(-2px);border-color:var(--acc)}
+.pc{border-radius:18px}
+.pc.r1{border-color:var(--gold);background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 16%,var(--card)),var(--card))}
+.pc.r2{border-color:var(--sil);background:linear-gradient(180deg,color-mix(in srgb,var(--sil) 16%,var(--card)),var(--card))}
+.pc.r3{border-color:var(--bro);background:linear-gradient(180deg,color-mix(in srgb,var(--bro) 16%,var(--card)),var(--card))}
+.hl{background:linear-gradient(120deg,var(--ink) 30%,var(--acc));-webkit-background-clip:text;background-clip:text;color:transparent}
+details{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 14px}
+#tag{border-radius:12px}
+@media(max-width:760px){header{padding:10px 14px}.card{padding:16px}}
+@media print{html[data-theme] body{--bg:#fff;--card:#fff;--ink:#000;--mute:#444;--line:#999;--tint:#fff}.card{box-shadow:none}}
 </style></head><body>
 <a class="skip" href="#app">Skip to content</a><header><div class="brand" role="link" tabindex="0" title="Home"><div class="logo" aria-hidden="true"><i style="background:#fff;border:1px solid #bbb"></i><i style="background:#ffd500"></i><i style="background:#0051ba"></i><i style="background:#c41e3a"></i><i style="background:#009b48"></i><i style="background:#ff5800"></i><i style="background:#ffd500"></i><i style="background:#0051ba"></i><i style="background:#009b48"></i></div>
-<h1>Rubiks Competition Manager</h1></div><nav id="nav"></nav><button class="b" id="stg">Stage mode</button></header>
+<h1>SolveBoard</h1></div><nav id="nav"></nav><button class="b" id="stg">Stage mode</button><button class="b" id="thm" aria-label="Switch colour theme"></button></header>
 <main id="app" tabindex="-1"></main><footer id="foot"><a href="#/about">About</a> · <a href="#/privacy">Privacy</a> · <a href="#/about">Contact</a></footer>
 <script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
@@ -424,4 +466,5 @@ app.addEventListener('change',e=>{const t=e.target,d=t.dataset;if(d.act==='stat'
 else if(t.id==='rall'&&ADMIN){const f=t.files[0];if(f)f.text().then(x=>{try{const o=JSON.parse(x);if(!o.comps)throw 0;if(confirm('Replace everything in this browser with the backup?')){DB=o;DB.pin=DB.pin||'';save();render()}}catch(z){alert('That file is not a valid backup.')}})}});
 if(CF.title){document.title=CF.title;document.querySelector('.brand h1').textContent=CF.title}if(CF.logo)document.querySelector('.logo').innerHTML='<img alt="" src="'+String(CF.logo).replace(/"/g,'')+'" style="width:100%;height:100%;object-fit:contain">';if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js').catch(()=>{});
 document.addEventListener('toggle',e=>{const d=e.target;if(d.dataset&&d.dataset.sr)(UI.so=UI.so||{})[d.dataset.sr]=d.open},true);paint();window.addEventListener('hashchange',()=>{if(!route()&&['public','enter','profile','about'].includes(UI.page))UI.page='comps';render()});route();render();if(CLOUD)boot();
+(function(){const b=document.getElementById('thm'),h=document.documentElement,set=t=>{h.dataset.theme=t;b.textContent=t==='dark'?'☀':'☾';b.title=t==='dark'?'Switch to light mode':'Switch to dark mode';const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='dark'?'#0c0f16':'#3a56f5'};set(h.dataset.theme||'light');b.onclick=()=>{const t=h.dataset.theme==='dark'?'light':'dark';set(t);try{localStorage.setItem('rcm.theme',t)}catch(e){}}})();
 </script></body></html>
